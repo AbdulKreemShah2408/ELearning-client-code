@@ -24,8 +24,7 @@ const CoursesContent = () => {
   const layoutCategories = categories?.layout?.categories;
 
 useEffect(() => {
-  // fix the search functionality
-  const fetchedCourses = data?.courses; 
+  const fetchedCourses = data?.courses || data?.course; 
 
   if (!fetchedCourses) return;
 
@@ -38,12 +37,17 @@ useEffect(() => {
   } else if (category === "All") {
     setCourses(fetchedCourses); 
   } else {
+   
     setCourses(
-      fetchedCourses.filter(
-        (item: any) =>
-          item.categories &&
-          item.categories.toLowerCase() === category.toLowerCase()
-      )
+      fetchedCourses.filter((item: any) => {
+        
+        const itemCategory = item.categories || item.category;
+        
+        return (
+          itemCategory &&
+          itemCategory.toLowerCase().trim() === category.toLowerCase().trim()
+        );
+      })
     );
   }
 }, [category, data, searchTerm]);
